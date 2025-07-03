@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/hooks/use-toast';
-import { ShieldCheck, LogIn, UserPlus, Mail, Lock, Eye, EyeOff, Sparkles, Shield } from 'lucide-react';
+import { ShieldCheck, LogIn, UserPlus, Mail, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { CadastroClienteStepForm } from '@/components/Auth/CadastroClienteStepForm';
 
 export default function Auth() {
@@ -16,44 +16,9 @@ export default function Auth() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [securityCheck, setSecurityCheck] = useState(false);
   
   const { login } = useAuth();
   const navigate = useNavigate();
-
-  // Verificação de segurança na inicialização
-  useEffect(() => {
-    // Verificar se está sendo executado em HTTPS em produção
-    if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-      toast({
-        title: "Conexão Insegura",
-        description: "Por segurança, use sempre HTTPS para fazer login.",
-        variant: "destructive",
-      });
-    }
-    
-    // Verificar se o console está aberto (básico)
-    const devtools = {
-      open: false,
-      orientation: null
-    };
-    
-    const threshold = 160;
-    setInterval(() => {
-      if (window.outerHeight - window.innerHeight > threshold || 
-          window.outerWidth - window.innerWidth > threshold) {
-        if (!devtools.open) {
-          devtools.open = true;
-          // Limpar dados sensíveis se console for detectado
-          setPassword('');
-        }
-      } else {
-        devtools.open = false;
-      }
-    }, 500);
-    
-    setSecurityCheck(true);
-  }, []);
 
   // Validação de entrada em tempo real
   const validateInput = (value: string, type: 'email' | 'password'): boolean => {
@@ -86,15 +51,6 @@ export default function Auth() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!securityCheck) {
-      toast({
-        title: "Verificação de segurança",
-        description: "Aguarde a verificação de segurança...",
-        variant: "destructive",
-      });
-      return;
-    }
 
     // Validações de entrada
     if (!validateInput(email, 'email')) {
@@ -155,28 +111,11 @@ export default function Auth() {
     }
   };
 
-  // Prevenir colar senha de forma insegura
-  const handlePasswordPaste = (e: React.ClipboardEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Segurança",
-      description: "Por segurança, digite sua senha manualmente.",
-      variant: "default",
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-slate-100 opacity-30"></div>
       
-      {/* Security Indicators */}
-      <div className="absolute top-4 right-4 flex items-center gap-1 sm:gap-2 text-xs text-slate-600 bg-white/80 backdrop-blur-sm px-2 sm:px-3 py-1 sm:py-2 rounded-full border border-slate-200">
-        <Shield className="h-3 w-3 text-green-600" />
-        <span className="hidden sm:inline">Conexão Segura</span>
-        <span className="sm:hidden">Seguro</span>
-      </div>
-
       {/* Floating Elements */}
       <div className="absolute top-20 left-20 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-r from-slate-200/30 to-slate-300/30 rounded-full blur-xl animate-float"></div>
       <div className="absolute bottom-20 right-20 w-20 h-20 sm:w-32 sm:h-32 bg-gradient-to-r from-slate-300/30 to-slate-400/30 rounded-full blur-xl animate-float" style={{ animationDelay: '2s' }}></div>
@@ -264,7 +203,6 @@ export default function Auth() {
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => handleInputChange(e.target.value, 'password')}
-                        onPaste={handlePasswordPaste}
                         className="h-9 sm:h-10 pl-3 pr-10 bg-white/95 border border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-800/10 rounded-lg transition-all duration-200 text-xs sm:text-sm placeholder:text-slate-400"
                         required
                         autoComplete="current-password"
@@ -286,7 +224,7 @@ export default function Auth() {
                   <Button 
                     type="submit" 
                     className="w-full h-9 sm:h-10 bg-gradient-to-r from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 text-white font-semibold transition-all duration-200 rounded-lg shadow-sm hover:shadow-md text-xs sm:text-sm" 
-                    disabled={isLoading || !securityCheck}
+                    disabled={isLoading}
                   >
                     {isLoading ? (
                       <div className="flex items-center gap-2">
