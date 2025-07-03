@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Teste de Hospedagem</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        .success { color: green; }
+        .error { color: red; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug da Hospedagem</h1>
+    
+    <h2>Teste de Arquivos</h2>
+    <div id="file-tests">
+        <p>⏳ Testando arquivos...</p>
+    </div>
+    
+    <h2>Informações do Browser</h2>
+    <pre id="browser-info"></pre>
+    
+    <h2>Teste de Console</h2>
+    <div id="console-test"></div>
+
+    <script>
+        // Informações do browser
+        document.getElementById('browser-info').textContent = `
+URL: ${window.location.href}
+User Agent: ${navigator.userAgent}
+Screen: ${screen.width}x${screen.height}
+Viewport: ${window.innerWidth}x${window.innerHeight}
+        `.trim();
+
+        // Teste de console
+        console.log('✅ Console funcionando');
+        document.getElementById('console-test').innerHTML = '<span class="success">✅ Console funcionando (verifique F12)</span>';
+
+        // Teste de arquivos
+        async function testFiles() {
+            const files = ['/', '/assets/index.css', '/assets/index.js'];
+            const results = [];
+            
+            for (const file of files) {
+                try {
+                    const response = await fetch(file, { method: 'HEAD' });
+                    const status = response.ok ? '✅' : '❌';
+                    results.push(`${status} ${file} - Status: ${response.status}`);
+                } catch (error) {
+                    results.push(`❌ ${file} - Erro: ${error.message}`);
+                }
+            }
+            
+            document.getElementById('file-tests').innerHTML = results.map(r => `<p>${r}</p>`).join('');
+        }
+        
+        testFiles();
+    </script>
+</body>
+</html>
