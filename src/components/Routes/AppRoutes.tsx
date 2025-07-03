@@ -42,10 +42,13 @@ export function AppRoutes() {
       {/* Portal do Cliente - Rota pública específica */}
       <Route path="/portal/:clienteId" element={<PortalCliente />} />
       
-      {/* Página Inicial - AGORA É PÚBLICA */}
-      <Route path="/inicio" element={<Index />} />
-      
       {/* Rotas protegidas apenas para admin e gestor */}
+      <Route path="/inicio" element={
+        <ProtectedRoute requiredRoles={['admin', 'gestor']}>
+          <Index />
+        </ProtectedRoute>
+      } />
+      
       <Route path="/dashboard" element={
         <ProtectedRoute requiredRoles={['admin', 'gestor']}>
           <Dashboard />

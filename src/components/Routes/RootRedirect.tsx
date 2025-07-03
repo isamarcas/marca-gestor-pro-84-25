@@ -5,9 +5,8 @@ import { useAuth } from '@/hooks/useAuth';
 export function RootRedirect() {
   const { user } = useAuth();
   
-  // Se não tem usuário logado, vai para a página inicial pública
   if (!user) {
-    return <Navigate to="/inicio" replace />;
+    return <Navigate to="/auth" replace />;
   }
   
   console.log('🔄 [RootRedirect] Redirecionando usuário:', {
@@ -21,11 +20,11 @@ export function RootRedirect() {
     return <Navigate to={`/portal/${user.id}`} replace />;
   }
   
-  // Admin e gestores vão para o dashboard
+  // Admin e gestores vão para a página inicial administrativa
   if (user.role === 'admin' || user.role === 'gestor') {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/inicio" replace />;
   }
   
-  // Fallback para página inicial
-  return <Navigate to="/inicio" replace />;
+  // Fallback para usuários sem role definido
+  return <Navigate to="/auth" replace />;
 }
