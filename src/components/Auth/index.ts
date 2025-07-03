@@ -1,0 +1,2 @@
+
+export { CadastroClienteForm } from './CadastroClienteForm';

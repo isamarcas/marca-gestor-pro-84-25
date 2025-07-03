@@ -1,0 +1,50 @@
+
+@layer utilities {
+  .text-responsive {
+    @apply text-sm sm:text-base;
+  }
+  
+  .heading-responsive {
+    @apply text-lg sm:text-xl lg:text-2xl;
+  }
+  
+  .padding-responsive {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+  
+  .gap-responsive {
+    @apply gap-3 sm:gap-4 lg:gap-6;
+  }
+
+  /* Clean premium shadows */
+  .shadow-premium {
+    box-shadow: 
+      0 1px 3px 0 rgba(0, 0, 0, 0.1),
+      0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+
+  .shadow-elegant {
+    box-shadow: 
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .shadow-soft {
+    box-shadow: 
+      0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  /* Glass effects with lighter touch */
+  .glass-light {
+    backdrop-filter: blur(8px) saturate(120%);
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .glass-subtle {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+}
